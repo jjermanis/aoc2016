@@ -1,8 +1,6 @@
-using AoC2016;
-
 namespace AoC2016Test;
 
-public class Tests
+public class DayTestCases
 {
     [SetUp]
     public void Setup()
@@ -10,9 +8,14 @@ public class Tests
     }
 
     [Test]
-    public void Test1()
+    public void Day01()
     {
-        Assert.Pass();
+        var d = new Day01();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.TotalWalkDistance(), Is.EqualTo(278));
+            Assert.That(d.RepeatLocationDistance(), Is.EqualTo(161));
+        });
     }
 
     /*

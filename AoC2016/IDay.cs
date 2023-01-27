@@ -1,7 +1,6 @@
-﻿namespace AoC2016
+﻿namespace AoC2016;
+
+internal interface IDay
 {
-    internal interface IDay
-    {
-        void Do();
-    }
+    void Do();
 }
