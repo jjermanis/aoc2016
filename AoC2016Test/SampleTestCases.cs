@@ -23,18 +23,16 @@ public class SampleTestCases
         Assert.That(t4.RepeatLocationDistance(), Is.EqualTo(4));
     }
 
-    /*
     [Test]
     public void Day02()
     {
-        var d1 = new Day01("Day01Test01.txt");
+        var d = new Day02("Day02Test.txt");
         Assert.Multiple(() =>
         {
-            Assert.That(d1.TotalWalkDistance(), Is.EqualTo(5));
-            //Assert.That(d1.Part2(), Is.EqualTo(-1));
+            Assert.That(d.SquareCode(), Is.EqualTo(1985));
+            Assert.That(d.DiamondCode(), Is.EqualTo("5DB3"));
         });
-
     }
-    */
+
 }
 

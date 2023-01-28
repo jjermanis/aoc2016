@@ -18,6 +18,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day02()
+    {
+        var d = new Day02();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.SquareCode(), Is.EqualTo(73597));
+            Assert.That(d.DiamondCode(), Is.EqualTo("A47DA"));
+        });
+    }
+
     /*
     public void DayStarter()
     {

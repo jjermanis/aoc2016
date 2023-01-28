@@ -8,7 +8,7 @@ internal class Program
     {
         int start = Environment.TickCount;
 
-        new Day01().Do();
+        new Day02().Do();
         //RunAll();
 
         Console.WriteLine($"Time: {Environment.TickCount - start} ms");
