@@ -29,7 +29,19 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day03()
+    {
+        var d = new Day03();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.HorizontalTriangleCount(), Is.EqualTo(1032));
+            Assert.That(d.VeriticalTriangleCount(), Is.EqualTo(1838));
+        });
+    }
+
     /*
+    [Test]
     public void DayStarter()
     {
         var d = new DayStarter();

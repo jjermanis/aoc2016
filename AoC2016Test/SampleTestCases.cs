@@ -34,5 +34,7 @@ public class SampleTestCases
         });
     }
 
+    // NOTE: no useful samples for Day 3
+
 }
 
