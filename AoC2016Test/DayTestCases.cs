@@ -40,6 +40,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day04()
+    {
+        var d = new Day04();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.RealRoomIdSum(), Is.EqualTo(158835));
+            Assert.That(d.NorthPoleRoomId(), Is.EqualTo(993));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()

@@ -36,5 +36,14 @@ public class SampleTestCases
 
     // NOTE: no useful samples for Day 3
 
+    [Test]
+    public void Day04()
+    {
+        var t1 = new Day04("Day04Test.txt");
+        Assert.That(t1.RealRoomIdSum(), Is.EqualTo(1514));
+
+        // NOTE: no useful sample for 4-2
+    }
+
 }
 
