@@ -51,6 +51,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day05()
+    {
+        var d = new Day05();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.Part1(), Is.EqualTo("2414bc77"));
+            Assert.That(d.Part2(), Is.EqualTo("437e60fc"));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()

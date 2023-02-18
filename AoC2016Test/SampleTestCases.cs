@@ -45,5 +45,16 @@ public class SampleTestCases
         // NOTE: no useful sample for 4-2
     }
 
+    [Test]
+    public void Day05()
+    {
+        var d = new Day05("Day05Test.txt");
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.Part1(), Is.EqualTo("18f47a30"));
+            Assert.That(d.Part2(), Is.EqualTo("05ace8e3"));
+        });
+    }
+
 }
 
