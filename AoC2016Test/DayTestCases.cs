@@ -62,6 +62,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day06()
+    {
+        var d = new Day06();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.MostCommonEncoding(), Is.EqualTo("tsreykjj"));
+            Assert.That(d.LeastCommonEncoding(), Is.EqualTo("hnfbujie"));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()

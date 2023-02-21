@@ -56,5 +56,16 @@ public class SampleTestCases
         });
     }
 
+    [Test]
+    public void Day06()
+    {
+        var d = new Day06("Day06Test.txt");
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.MostCommonEncoding(), Is.EqualTo("easter"));
+            Assert.That(d.LeastCommonEncoding(), Is.EqualTo("advent"));
+        });
+    }
+
 }
 
