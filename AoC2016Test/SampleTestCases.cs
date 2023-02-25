@@ -67,5 +67,15 @@ public class SampleTestCases
         });
     }
 
+    [Test]
+    public void Day07()
+    {
+        var t1 = new Day07("Day07Test01.txt");
+        Assert.That(t1.TlsCount(), Is.EqualTo(2));
+
+        var t2 = new Day07("Day07Test02.txt");
+        Assert.That(t2.SslCount(), Is.EqualTo(3));
+    }
+
 }
 

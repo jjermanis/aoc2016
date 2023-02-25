@@ -73,6 +73,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day07()
+    {
+        var d = new Day07();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.TlsCount(), Is.EqualTo(118));
+            Assert.That(d.SslCount(), Is.EqualTo(260));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()
