@@ -77,5 +77,6 @@ public class SampleTestCases
         Assert.That(t2.SslCount(), Is.EqualTo(3));
     }
 
+    // NOTE: no useful samples for Day 8
 }
 

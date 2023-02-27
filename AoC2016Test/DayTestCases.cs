@@ -84,6 +84,14 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day08()
+    {
+        var d = new Day08();
+        Assert.That(d.LitPixelCount(), Is.EqualTo(106));
+        // 8-2 is graphical; no obvious unit test
+    }
+
     /*
     [Test]
     public void DayStarter()
