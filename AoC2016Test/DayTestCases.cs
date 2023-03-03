@@ -92,6 +92,17 @@ public class DayTestCases
         // 8-2 is graphical; no obvious unit test
     }
 
+    [Test]
+    public void Day09()
+    {
+        var d = new Day09();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.DecompressedLength(), Is.EqualTo(98135));
+            Assert.That(d.ImprovedDecompressedLength(), Is.EqualTo(10964557606));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()

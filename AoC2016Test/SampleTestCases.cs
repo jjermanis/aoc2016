@@ -78,5 +78,37 @@ public class SampleTestCases
     }
 
     // NOTE: no useful samples for Day 8
+
+    [Test]
+    public void Day09()
+    {
+        var t1 = new Day09("Day09Test01.txt");
+        Assert.That(t1.DecompressedLength(), Is.EqualTo(6));
+
+        var t2 = new Day09("Day09Test02.txt");
+        Assert.That(t2.DecompressedLength(), Is.EqualTo(7));
+
+        var t3 = new Day09("Day09Test03.txt");
+        Assert.That(t3.DecompressedLength(), Is.EqualTo(9));
+        Assert.That(t3.ImprovedDecompressedLength(), Is.EqualTo(9));
+
+        var t4 = new Day09("Day09Test04.txt");
+        Assert.That(t4.DecompressedLength(), Is.EqualTo(11));
+
+        var t5 = new Day09("Day09Test05.txt");
+        Assert.That(t5.DecompressedLength(), Is.EqualTo(6));
+
+        var t6 = new Day09("Day09Test06.txt");
+        Assert.That(t6.DecompressedLength(), Is.EqualTo(18));
+
+        var t7 = new Day09("Day09Test07.txt");
+        Assert.That(t7.ImprovedDecompressedLength(), Is.EqualTo(20));
+
+        var t8 = new Day09("Day09Test08.txt");
+        Assert.That(t8.ImprovedDecompressedLength(), Is.EqualTo(241920));
+
+        var t9 = new Day09("Day09Test09.txt");
+        Assert.That(t9.ImprovedDecompressedLength(), Is.EqualTo(445));
+    }
 }
 
