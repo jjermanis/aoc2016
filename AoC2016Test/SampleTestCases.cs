@@ -110,5 +110,8 @@ public class SampleTestCases
         var t9 = new Day09("Day09Test09.txt");
         Assert.That(t9.ImprovedDecompressedLength(), Is.EqualTo(445));
     }
+
+    // NOTE: no useful samples for Day 10
+
 }
 

@@ -103,6 +103,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day10()
+    {
+        var d = new Day10();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.SpecificBotCheck(), Is.EqualTo(27));
+            Assert.That(d.FirstThreeOutputProduct(), Is.EqualTo(13727));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()
