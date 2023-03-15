@@ -113,5 +113,11 @@ public class SampleTestCases
 
     // NOTE: no useful samples for Day 10
 
+    [Test]
+    public void Day12()
+    {
+        var d = new Day12("Day12Test.txt");
+        Assert.That(d.RegisterAValue(), Is.EqualTo(42));
+    }
 }
 

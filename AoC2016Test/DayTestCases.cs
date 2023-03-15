@@ -114,6 +114,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day12()
+    {
+        var d = new Day12();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.RegisterAValue(), Is.EqualTo(318083));
+            Assert.That(d.RegisterAValueWithInitC(), Is.EqualTo(9227737));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()
