@@ -119,5 +119,12 @@ public class SampleTestCases
         var d = new Day12("Day12Test.txt");
         Assert.That(d.RegisterAValue(), Is.EqualTo(42));
     }
+
+    [Test]
+    public void Day13()
+    {
+        var d = new Day13("Day13Test.txt");
+        Assert.That(d.ShortestPathLength(7, 4), Is.EqualTo(11));
+    }
 }
 
