@@ -126,5 +126,16 @@ public class SampleTestCases
         var d = new Day13("Day13Test.txt");
         Assert.That(d.ShortestPathLength(7, 4), Is.EqualTo(11));
     }
+
+    [Test]
+    public void Day14()
+    {
+        var d = new Day14("Day14Test.txt");
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.SimpleKeyNum64(), Is.EqualTo(22728));
+            Assert.That(d.ComplexKeyNum64(), Is.EqualTo(22551));
+        });
+    }
 }
 

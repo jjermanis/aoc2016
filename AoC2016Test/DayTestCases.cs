@@ -136,6 +136,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day14()
+    {
+        var d = new Day14();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.SimpleKeyNum64(), Is.EqualTo(18626));
+            Assert.That(d.ComplexKeyNum64(), Is.EqualTo(20092));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()
