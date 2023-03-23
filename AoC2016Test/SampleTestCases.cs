@@ -137,5 +137,13 @@ public class SampleTestCases
             Assert.That(d.ComplexKeyNum64(), Is.EqualTo(22551));
         });
     }
+
+    [Test]
+    public void Day15()
+    {
+        var d = new Day15("Day15Test.txt");
+        Assert.That(d.FirstClearTime(), Is.EqualTo(5));
+        // NOTE: no sample for 15-2
+    }
 }
 

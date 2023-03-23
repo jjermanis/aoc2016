@@ -147,6 +147,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day15()
+    {
+        var d = new Day15();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.FirstClearTime(), Is.EqualTo(400589));
+            Assert.That(d.FirstClearTimeWithNewDisc(), Is.EqualTo(3045959));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()
