@@ -158,6 +158,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day16()
+    {
+        var d = new Day16();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.SmallDiskChecksum(), Is.EqualTo("11100111011101111"));
+            Assert.That(d.LargeDiskChecksum(), Is.EqualTo("10001110010000110"));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()

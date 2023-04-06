@@ -145,5 +145,7 @@ public class SampleTestCases
         Assert.That(d.FirstClearTime(), Is.EqualTo(5));
         // NOTE: no sample for 15-2
     }
+
+    // NOTE: no useful samples for Day 16
 }
 
