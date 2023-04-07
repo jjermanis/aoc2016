@@ -169,6 +169,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day17()
+    {
+        var d = new Day17();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.ShortestPath(), Is.EqualTo("RDDRLDRURD"));
+            Assert.That(d.LongestPathLength(), Is.EqualTo(448));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()

@@ -147,5 +147,16 @@ public class SampleTestCases
     }
 
     // NOTE: no useful samples for Day 16
+
+    [Test]
+    public void Day17()
+    {
+        var d = new Day17("Day17Test.txt");
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.ShortestPath(), Is.EqualTo("DDRRRD"));
+            Assert.That(d.LongestPathLength(), Is.EqualTo(370));
+        });
+    }
 }
 
