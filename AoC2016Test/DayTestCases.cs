@@ -180,6 +180,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day18()
+    {
+        var d = new Day18();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.RowsCount40(), Is.EqualTo(1989));
+            Assert.That(d.RowsCount400000(), Is.EqualTo(19999894));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()

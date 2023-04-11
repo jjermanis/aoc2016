@@ -158,5 +158,13 @@ public class SampleTestCases
             Assert.That(d.LongestPathLength(), Is.EqualTo(370));
         });
     }
+
+    [Test]
+    public void Day18()
+    {
+        var d = new Day18("Day18Test.txt");
+        Assert.That(d.SafeTiles(10), Is.EqualTo(38));
+        // NOTE: no sample for 18-2
+    }
 }
 
