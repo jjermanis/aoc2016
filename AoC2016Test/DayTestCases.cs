@@ -191,6 +191,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day19()
+    {
+        var d = new Day19();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.LastElfStealNeighbor(), Is.EqualTo(1808357));
+            Assert.That(d.LastElfStealAcross(), Is.EqualTo(1407007));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()

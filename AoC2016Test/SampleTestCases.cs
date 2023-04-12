@@ -166,5 +166,16 @@ public class SampleTestCases
         Assert.That(d.SafeTiles(10), Is.EqualTo(38));
         // NOTE: no sample for 18-2
     }
+
+    [Test]
+    public void Day19()
+    {
+        var d = new Day19("Day19Test.txt");
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.LastElfStealNeighbor(), Is.EqualTo(3));
+            Assert.That(d.LastElfStealAcross(), Is.EqualTo(2));
+        });
+    }
 }
 
