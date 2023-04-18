@@ -177,5 +177,13 @@ public class SampleTestCases
             Assert.That(d.LastElfStealAcross(), Is.EqualTo(2));
         });
     }
+
+    [Test]
+    public void Day20()
+    {
+        var d = new Day20("Day20Test.txt");
+        Assert.That(d.LowestOpenIp(), Is.EqualTo(3));
+        // NOTE: no sample for 20-2
+    }
 }
 

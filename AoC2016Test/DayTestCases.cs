@@ -202,6 +202,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day20()
+    {
+        var d = new Day20();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.LowestOpenIp(), Is.EqualTo(17348574));
+            Assert.That(d.OpenIpCount(), Is.EqualTo(104));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()
