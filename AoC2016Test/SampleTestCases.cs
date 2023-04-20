@@ -114,6 +114,14 @@ public class SampleTestCases
     // NOTE: no useful samples for Day 10
 
     [Test]
+    public void Day11()
+    {
+        var d = new Day11("Day11Test.txt");
+        Assert.That(d.MinimumSteps(), Is.EqualTo(11));
+        // NOTE: no sample for 11-2
+    }
+
+    [Test]
     public void Day12()
     {
         var d = new Day12("Day12Test.txt");

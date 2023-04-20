@@ -115,6 +115,17 @@ public class DayTestCases
     }
 
     [Test]
+    public void Day11()
+    {
+        var d = new Day11();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.MinimumSteps(), Is.EqualTo(31));
+            Assert.That(d.MinimumWithExtraParts(), Is.EqualTo(55));
+        });
+    }
+
+    [Test]
     public void Day12()
     {
         var d = new Day12();
