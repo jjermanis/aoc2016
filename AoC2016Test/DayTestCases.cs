@@ -224,6 +224,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day21()
+    {
+        var d = new Day21();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.Scramble(), Is.EqualTo("fdhbcgea"));
+            Assert.That(d.Unscramble(), Is.EqualTo("egfbcadh"));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()

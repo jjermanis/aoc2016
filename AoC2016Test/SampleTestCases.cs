@@ -193,5 +193,13 @@ public class SampleTestCases
         Assert.That(d.LowestOpenIp(), Is.EqualTo(3));
         // NOTE: no sample for 20-2
     }
+
+    [Test]
+    public void Day21()
+    {
+        var d = new Day21("Day21Test.txt");
+        Assert.That(d.Evaluate("abcde"), Is.EqualTo("decab"));
+        // NOTE: no sample for 21-2
+    }
 }
 
