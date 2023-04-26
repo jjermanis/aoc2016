@@ -235,6 +235,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day22()
+    {
+        var d = new Day22();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.ViablePairCount(), Is.EqualTo(1007));
+            Assert.That(d.ShortestPathLength(), Is.EqualTo(242));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()

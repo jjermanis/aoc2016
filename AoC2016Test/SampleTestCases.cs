@@ -201,5 +201,8 @@ public class SampleTestCases
         Assert.That(d.Evaluate("abcde"), Is.EqualTo("decab"));
         // NOTE: no sample for 21-2
     }
+
+    // NOTE: no useful samples for Day 22
+
 }
 
