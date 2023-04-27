@@ -246,6 +246,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day23()
+    {
+        var d = new Day23();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.Value7Eggs(), Is.EqualTo(12800));
+            Assert.That(d.Value12Eggs(), Is.EqualTo(479009360));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()

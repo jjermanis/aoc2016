@@ -204,5 +204,13 @@ public class SampleTestCases
 
     // NOTE: no useful samples for Day 22
 
+    [Test]
+    public void Day23()
+    {
+        var d = new Day23("Day23Test.txt");
+        Assert.That(d.Value7Eggs, Is.EqualTo(3));
+        // NOTE: no sample for 23-2
+    }
+
 }
 
