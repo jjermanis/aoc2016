@@ -257,6 +257,17 @@ public class DayTestCases
         });
     }
 
+    [Test]
+    public void Day24()
+    {
+        var d = new Day24();
+        Assert.Multiple(() =>
+        {
+            Assert.That(d.ShortestVisitAllDucts(), Is.EqualTo(428));
+            Assert.That(d.ShortestVisitRoundtrip(), Is.EqualTo(680));
+        });
+    }
+
     /*
     [Test]
     public void DayStarter()

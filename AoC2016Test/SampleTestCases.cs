@@ -212,5 +212,13 @@ public class SampleTestCases
         // NOTE: no sample for 23-2
     }
 
+    [Test]
+    public void Day24()
+    {
+        var d = new Day24("Day24Test.txt");
+        Assert.That(d.ShortestVisitAllDucts, Is.EqualTo(14));
+        // NOTE: no sample for 24-2
+    }
+
 }
 
