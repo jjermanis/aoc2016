@@ -220,5 +220,7 @@ public class SampleTestCases
         // NOTE: no sample for 24-2
     }
 
+    // NOTE: no sample for Day 25
+
 }
 

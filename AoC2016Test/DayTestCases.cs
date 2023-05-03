@@ -268,16 +268,11 @@ public class DayTestCases
         });
     }
 
-    /*
     [Test]
-    public void DayStarter()
+    public void Day25()
     {
-        var d = new DayStarter();
-        Assert.Multiple(() =>
-        {
-            Assert.That(d.Part1(), Is.EqualTo(-1));
-            Assert.That(d.Part2(), Is.EqualTo(-1));
-        });
+        var d = new Day25("Day25.txt");
+        Assert.That(d.LowestInitForAlternation, Is.EqualTo(182));
+        // NOTE: there is no 25-2
     }
-    */
 }
