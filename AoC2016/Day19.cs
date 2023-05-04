@@ -2,11 +2,6 @@
 
 public class Day19 : DayBase, IDay
 {
-    // TODO refactor DayBase to support reading a single int out of the file. Day 13
-    // would use it too.
-    // 19-2 is super slow, about 15 minutes. Switching to a different data struct
-    // (double linked list?) should drop this a lot.
-
     private readonly int _elfCount;
 
     public Day19(string filename)
@@ -46,26 +41,26 @@ public class Day19 : DayBase, IDay
 
     public int LastElfStealAcross()
     {
-        var remaining = new List<int>();
+        var remaining = new LinkedList<int>();
         for (var x = 1; x <= _elfCount; x++)
-            remaining.Add(x);
-        var currIndex = 0;
-
+            remaining.AddLast(x);
+        var currNode = remaining.Find((remaining.Count / 2) + 1);
+        bool extraStep = false;
         while (remaining.Count > 1)
         {
-            var victimIndex = currIndex + (remaining.Count / 2);
-            bool isBehind = false;
-            if (victimIndex >= remaining.Count)
-            {
-                isBehind = true;
-                victimIndex = victimIndex % remaining.Count;
-            }
-            remaining.RemoveAt(victimIndex);
-            if (!isBehind)
-                currIndex++;
-            if (currIndex == remaining.Count)
-                currIndex = 0;
+            var next = GetNext(currNode, remaining.First);
+            remaining.Remove(currNode);
+            if (extraStep)
+                next = GetNext(next, remaining.First);
+            extraStep = !extraStep;
+            currNode = next;
         }
-        return remaining[0];
+        if (remaining.First == null)
+            throw new Exception("Logical error");
+        return remaining.First.Value;
     }
+
+    private LinkedListNode<int> GetNext(LinkedListNode<int> curr, LinkedListNode<int> head)
+        => curr.Next != null ? curr.Next : head;
+
 }
