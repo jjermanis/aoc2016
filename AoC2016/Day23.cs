@@ -33,7 +33,7 @@ public class Day23 : DayBase, IDay
         var vm = new AssembunnyVm(_lines);
         var registers = InitRegisters();
         registers['a'] = eggCount;
-        registers = vm.RunProgram(registers);
+        vm.RunProgram(registers);
         return registers['a'];
     }
 

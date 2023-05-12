@@ -24,7 +24,7 @@ public class Day12 : DayBase, IDay
     public int RegisterAValue()
     {
         var registers = InitRegisters();
-        registers = _vm.RunProgram(registers);
+        _vm.RunProgram(registers);
         return registers['a'];
     }
 
@@ -32,7 +32,7 @@ public class Day12 : DayBase, IDay
     {
         var registers = InitRegisters();
         registers['c'] = 1;
-        registers = _vm.RunProgram(registers);
+        _vm.RunProgram(registers);
         return registers['a'];
     }
 

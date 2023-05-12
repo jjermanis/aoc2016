@@ -2,9 +2,7 @@
 
 public class Day25 : DayBase, IDay
 {
-    // TODO yet another VM problem, similar to Day 12 and 23. Shared VM code.
-    // This case is a little different since this VM should run infinitely.
-    // TODO is there a better approach to "infinite" than trying it 1k times?
+    // TODO is there a better approach to "infinite" than trying it 100 times?
 
     private readonly IList<string> _lines;
 
@@ -42,50 +40,17 @@ public class Day25 : DayBase, IDay
         return result;
     }
 
-    private int ParseValue(string val, Dictionary<char, int> registers)
-    {
-        if (int.TryParse(val, out var valNum))
-            return valNum;
-        else
-            return registers[val[0]];
-    }
-
     private bool RunProgram(Dictionary<char, int> registers)
     {
-        var expected = 0;
         var count = 0;
-        for (var i = 0; i < _lines.Count(); i++)
+        var vm = new AssembunnyVm(_lines);
+        foreach (var val in vm.RunProgramWithOutput(registers))
         {
-            var curr = _lines[i].Split(' ');
-            var inst = curr[0];
-
-            switch (inst)
-            {
-                case "cpy":
-                    registers[curr[2][0]] = ParseValue(curr[1], registers);
-                    break;
-                case "inc":
-                    registers[curr[1][0]]++;
-                    break;
-                case "dec":
-                    registers[curr[1][0]]--;
-                    break;
-                case "jnz":
-                    if (ParseValue(curr[1], registers) != 0)
-                        i += int.Parse(curr[2]) - 1;
-                    break;
-                case "out":
-                    var output = ParseValue(curr[1], registers);
-                    if (output != expected)
-                        return false;
-                    count++;
-                    if (count >= 100)
-                        return true;
-                    expected = (expected + 1) % 2;
-                    break;
-                default:
-                    throw new Exception($"Unknown instruction: {inst}");
-            }
+            if (val != count++ % 2)
+                return false;
+ 
+            if (count >= 100)
+                return true;
         }
         return false;
     }

@@ -6,8 +6,19 @@ internal class AssembunnyVm
     //  Or maybe Instructions all have a reference to AssembunnyVm, which would have needed members?
     // TODO switch to using an array internally, convert to Dictionary at end
 
+    internal enum Operator
+    {
+        Cpy,
+        Inc,
+        Dec, 
+        Jnz,
+        Tgl,
+        Out
+    };
+
     internal interface Instruction
     {
+        Operator Operator { get; }
         int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions);
         Instruction Toggle();
     }
@@ -25,6 +36,8 @@ internal class AssembunnyVm
 
         public override string ToString()
             => $"cpy {ValueSrc} {RegisterDest}";
+
+        public Operator Operator => Operator.Cpy;
 
         public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
         {
@@ -50,6 +63,8 @@ internal class AssembunnyVm
         public override string ToString()
             => $"cpy {RegisterSrc} {RegisterDest}";
 
+        public Operator Operator => Operator.Cpy;
+
         public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
         {
             registers[RegisterDest] = registers[RegisterSrc];
@@ -72,6 +87,8 @@ internal class AssembunnyVm
         public override string ToString()
             => $"inc {Register}";
 
+        public Operator Operator => Operator.Inc;
+
         public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
         {
             registers[Register]++;
@@ -93,6 +110,8 @@ internal class AssembunnyVm
 
         public override string ToString()
             => $"dec {Register}";
+
+        public Operator Operator => Operator.Dec;
 
         public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
         {
@@ -118,6 +137,8 @@ internal class AssembunnyVm
 
         public override string ToString()
             => $"jnz {RegCheck} {ValueDelta}";
+
+        public Operator Operator => Operator.Jnz;
 
         public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
         {
@@ -146,6 +167,8 @@ internal class AssembunnyVm
         public override string ToString()
             => $"jnz {ValueCheck} {RegDelta}";
 
+        public Operator Operator => Operator.Jnz;
+
         public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
         {
             if (ValueCheck != 0)
@@ -170,6 +193,8 @@ internal class AssembunnyVm
 
         public override string ToString()
             => $"jnz {ValueCheck} {ValueDelta}";
+
+        public Operator Operator => Operator.Jnz;
 
         public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
         {
@@ -198,6 +223,8 @@ internal class AssembunnyVm
         public override string ToString()
             => $"jnz {RegCheck} {RegDelta}";
 
+        public Operator Operator => Operator.Jnz;
+
         public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
         {
             if (registers[RegCheck] != 0)
@@ -223,6 +250,8 @@ internal class AssembunnyVm
         public override string ToString()
             => $"tcl {Register}";
 
+        public Operator Operator => Operator.Tgl;
+
         public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
         {
             var dest = pc + registers[Register];
@@ -237,6 +266,52 @@ internal class AssembunnyVm
         public Instruction Toggle()
         {
             return new Inc(Register);
+        }
+    }
+
+    internal class OutReg : Object, Instruction
+    {
+        private readonly char Register;
+
+        public OutReg(char register)
+        {
+            Register = register;
+        }
+
+        public override string ToString()
+            => $"out {Register}";
+
+        public Operator Operator => Operator.Out;
+
+        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+            => registers[Register];
+
+        public Instruction Toggle()
+        {
+            return new Inc(Register);
+        }
+    }
+
+    internal class OutNum : Object, Instruction
+    {
+        private readonly int Value;
+
+        public OutNum(int value)
+        {
+            Value = value;
+        }
+
+        public override string ToString()
+            => $"out {Value}";
+
+        public Operator Operator => Operator.Out;
+
+        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+            => Value;
+
+        public Instruction Toggle()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -287,20 +362,48 @@ internal class AssembunnyVm
                 }
             case "tgl":
                 return new Tgl(tokens[1][0]);
+            case "out":
+                {
+                    var isVal = int.TryParse(tokens[1], out int value);
+                    if (isVal)
+                        return new OutNum(value);
+                    else
+                        return new OutReg(tokens[1][0]);
+                }
             default:
                 throw new Exception($"Unhandled: {line}");
         }
     }
 
-    public Dictionary<char, int> RunProgram(Dictionary<char, int> registers)
+    public void RunProgram(Dictionary<char, int> registers)
+    {
+        foreach (var _ in RunProgramWithOutput(registers))
+            throw new Exception("Program generates output. Use RunProgramWithOutput for this case.");
+    }
+
+    public IEnumerable<int> RunProgramWithOutput(Dictionary<char, int> registers)
     {
         for (var pc = 0; pc < _instructions.Count(); pc++)
         {
-            var delta = _instructions[pc].Execute(registers, pc, _instructions);
-            if (delta != null)
-                pc += delta.Value - 1;
-        }
-        return registers;
-    }
+            var curr = _instructions[pc];
 
+            var result = curr.Execute(registers, pc, _instructions);
+            if (result != null)
+            {
+                var val = result.Value;
+
+                switch (curr.Operator)
+                {
+                    case Operator.Jnz:
+                        pc += val - 1;
+                        break;
+                    case Operator.Out:
+                        yield return val;
+                        break;
+                    default:
+                        throw new Exception("No result expected for {curr}");
+                }
+            }
+        }
+    }
 }
