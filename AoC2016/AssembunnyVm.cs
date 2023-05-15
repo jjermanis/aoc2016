@@ -4,7 +4,6 @@ internal class AssembunnyVm
 {
     // TODO try making _instructions a member of all Instructions, to avoid having to pass repeatedly.
     //  Or maybe Instructions all have a reference to AssembunnyVm, which would have needed members?
-    // TODO switch to using an array internally, convert to Dictionary at end
 
     internal enum Operator
     {
@@ -19,27 +18,27 @@ internal class AssembunnyVm
     internal interface Instruction
     {
         Operator Operator { get; }
-        int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions);
+        int? Execute(int[] registers, int pc, List<Instruction> instructions);
         Instruction Toggle();
     }
 
     internal class CpyNumReg : Object, Instruction
     {
         private readonly int ValueSrc;
-        private readonly char RegisterDest;
+        private readonly int RegisterDest;
 
-        public CpyNumReg(int valueSrc, char regDest)
+        public CpyNumReg(int valueSrc, int regDest)
         {
             ValueSrc = valueSrc;
             RegisterDest = regDest;
         }
 
-        public override string ToString()
-            => $"cpy {ValueSrc} {RegisterDest}";
+        public override string ToString() 
+            => $"cpy {ValueSrc} {(char)('a' + RegisterDest)}";
 
         public Operator Operator => Operator.Cpy;
 
-        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+        public int? Execute(int[] registers, int pc, List<Instruction> instructions)
         {
             registers[RegisterDest] = ValueSrc;
             return null;
@@ -51,21 +50,21 @@ internal class AssembunnyVm
 
     internal class CpyRegReg : Object, Instruction
     {
-        private readonly char RegisterSrc;
-        private readonly char RegisterDest;
+        private readonly int RegisterSrc;
+        private readonly int RegisterDest;
 
-        public CpyRegReg(char regSrc, char regDest)
+        public CpyRegReg(int regSrc, int regDest)
         {
             RegisterSrc = regSrc;
             RegisterDest = regDest;
         }
 
         public override string ToString()
-            => $"cpy {RegisterSrc} {RegisterDest}";
+            => $"cpy {(char)('a' + RegisterSrc)} {(char)('a' + RegisterDest)}";
 
         public Operator Operator => Operator.Cpy;
 
-        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+        public int? Execute(int[] registers, int pc, List<Instruction> instructions)
         {
             registers[RegisterDest] = registers[RegisterSrc];
             return null;
@@ -73,23 +72,21 @@ internal class AssembunnyVm
 
         public Instruction Toggle()
             => new JmpRegReg(RegisterSrc, RegisterDest);
-        }
+    }
 
     internal class Inc : Object, Instruction
     {
-        private readonly char Register;
+        private readonly int Register;
 
-        public Inc(char register)
-        {
-            Register = register;
-        }
+        public Inc(int register) 
+            => Register = register;
 
         public override string ToString()
-            => $"inc {Register}";
+            => $"inc {(char)('a' + Register)}";
 
         public Operator Operator => Operator.Inc;
 
-        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+        public int? Execute(int[] registers, int pc, List<Instruction> instructions)
         {
             registers[Register]++;
             return null;
@@ -101,19 +98,19 @@ internal class AssembunnyVm
 
     internal class Dec : Object, Instruction
     {
-        private readonly char Register;
+        private readonly int Register;
 
-        public Dec(char register)
+        public Dec(int register)
         {
             Register = register;
         }
 
         public override string ToString()
-            => $"dec {Register}";
+            => $"dec {(char)('a' + Register)}";
 
         public Operator Operator => Operator.Dec;
 
-        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+        public int? Execute(int[] registers, int pc, List<Instruction> instructions)
         {
             registers[Register]--;
             return null;
@@ -121,26 +118,25 @@ internal class AssembunnyVm
 
         public Instruction Toggle()
             => new Inc(Register);
-
     }
 
     internal class JmpRegNum : Object, Instruction
     {
-        private readonly char RegCheck;
+        private readonly int RegCheck;
         private readonly int ValueDelta;
 
-        public JmpRegNum(char regCheck, int valueDelta)
+        public JmpRegNum(int regCheck, int valueDelta)
         {
             RegCheck = regCheck;
             ValueDelta = valueDelta;
         }
 
         public override string ToString()
-            => $"jnz {RegCheck} {ValueDelta}";
+            => $"jnz {(char)('a' + RegCheck)} {ValueDelta}";
 
         public Operator Operator => Operator.Jnz;
 
-        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+        public int? Execute(int[] registers, int pc, List<Instruction> instructions)
         {
             if (registers[RegCheck] != 0)
                 return ValueDelta;
@@ -148,28 +144,26 @@ internal class AssembunnyVm
         }
 
         public Instruction Toggle()
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
     }
 
     internal class JmpNumReg : Object, Instruction
     {
         private readonly int ValueCheck;
-        private readonly char RegDelta;
+        private readonly int RegDelta;
 
-        public JmpNumReg(int valueCheck, char regDelta)
+        public JmpNumReg(int valueCheck, int regDelta)
         {
             ValueCheck = valueCheck;
             RegDelta = regDelta;
         }
 
         public override string ToString()
-            => $"jnz {ValueCheck} {RegDelta}";
+            => $"jnz {ValueCheck} {(char)('a' + RegDelta)}";
 
         public Operator Operator => Operator.Jnz;
 
-        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+        public int? Execute(int[] registers, int pc, List<Instruction> instructions)
         {
             if (ValueCheck != 0)
                 return registers[RegDelta];
@@ -196,7 +190,7 @@ internal class AssembunnyVm
 
         public Operator Operator => Operator.Jnz;
 
-        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+        public int? Execute(int[] registers, int pc, List<Instruction> instructions)
         {
             if (ValueCheck != 0)
                 return ValueDelta;
@@ -211,21 +205,21 @@ internal class AssembunnyVm
 
     internal class JmpRegReg : Object, Instruction
     {
-        private readonly char RegCheck;
-        private readonly char RegDelta;
+        private readonly int RegCheck;
+        private readonly int RegDelta;
 
-        public JmpRegReg(char regCheck, char regDelta)
+        public JmpRegReg(int regCheck, int regDelta)
         {
             RegCheck = regCheck;
             RegDelta = regDelta;
         }
 
         public override string ToString()
-            => $"jnz {RegCheck} {RegDelta}";
+            => $"jnz {(char)('a' + RegCheck)} {(char)('a' + RegDelta)}";
 
         public Operator Operator => Operator.Jnz;
 
-        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+        public int? Execute(int[] registers, int pc, List<Instruction> instructions)
         {
             if (registers[RegCheck] != 0)
                 return registers[RegDelta];
@@ -240,19 +234,19 @@ internal class AssembunnyVm
 
     internal class Tgl : Object, Instruction
     {
-        private readonly char Register;
+        private readonly int Register;
 
-        public Tgl(char register)
+        public Tgl(int register)
         {
             Register = register;
         }
 
         public override string ToString()
-            => $"tcl {Register}";
+            => $"tcl {(char)('a' + Register)}";
 
         public Operator Operator => Operator.Tgl;
 
-        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+        public int? Execute(int[] registers, int pc, List<Instruction> instructions)
         {
             var dest = pc + registers[Register];
             if (dest < instructions.Count)
@@ -264,32 +258,28 @@ internal class AssembunnyVm
         }
 
         public Instruction Toggle()
-        {
-            return new Inc(Register);
-        }
+            => new Inc(Register);
     }
 
     internal class OutReg : Object, Instruction
     {
-        private readonly char Register;
+        private readonly int Register;
 
-        public OutReg(char register)
+        public OutReg(int register)
         {
             Register = register;
         }
 
         public override string ToString()
-            => $"out {Register}";
+            => $"out {(char)('a' + Register)}";
 
         public Operator Operator => Operator.Out;
 
-        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+        public int? Execute(int[] registers, int pc, List<Instruction> instructions)
             => registers[Register];
 
         public Instruction Toggle()
-        {
-            return new Inc(Register);
-        }
+            => new Inc(Register);
     }
 
     internal class OutNum : Object, Instruction
@@ -306,13 +296,11 @@ internal class AssembunnyVm
 
         public Operator Operator => Operator.Out;
 
-        public int? Execute(Dictionary<char, int> registers, int pc, List<Instruction> instructions)
+        public int? Execute(int[] registers, int pc, List<Instruction> instructions)
             => Value;
 
         public Instruction Toggle()
-        {
-            throw new NotImplementedException();
-        }
+            => throw new NotImplementedException();
     }
 
     private readonly List<Instruction> _instructions;
@@ -332,15 +320,16 @@ internal class AssembunnyVm
             case "cpy":
                 {
                     var isVal = int.TryParse(tokens[1], out int value);
+                    var destReg = RegIndex(tokens[2]);
                     if (isVal)
-                        return new CpyNumReg(value, tokens[2][0]);
+                        return new CpyNumReg(value, destReg);
                     else
-                        return new CpyRegReg(tokens[1][0], tokens[2][0]);
+                        return new CpyRegReg(RegIndex(tokens[1]), destReg);
                 }
             case "inc":
-                return new Inc(tokens[1][0]);
+                return new Inc(RegIndex(tokens[1]));
             case "dec":
-                return new Dec(tokens[1][0]);
+                return new Dec(RegIndex(tokens[1]));
             case "jnz":
                 {
                     var isVal1 = int.TryParse(tokens[1], out int value1);
@@ -350,30 +339,33 @@ internal class AssembunnyVm
                         if (isVal2)
                             return new JmpNumNum(value1, value2);
                         else
-                            return new JmpNumReg(value1, tokens[2][0]);
+                            return new JmpNumReg(value1, RegIndex(tokens[2]));
                     }
                     else
                     {
                         if (isVal2)
-                            return new JmpRegNum(tokens[1][0], value2);
+                            return new JmpRegNum(RegIndex(tokens[1]), value2);
                         else
-                            return new JmpRegReg(tokens[1][0], tokens[2][0]);
+                            return new JmpRegReg(RegIndex(tokens[1]), RegIndex(tokens[2]));
                     }
                 }
             case "tgl":
-                return new Tgl(tokens[1][0]);
+                return new Tgl(RegIndex(tokens[1]));
             case "out":
                 {
                     var isVal = int.TryParse(tokens[1], out int value);
                     if (isVal)
                         return new OutNum(value);
                     else
-                        return new OutReg(tokens[1][0]);
+                        return new OutReg(RegIndex(tokens[1]));
                 }
             default:
                 throw new Exception($"Unhandled: {line}");
         }
     }
+
+    private int RegIndex(string token)
+        => token[0] - 'a';
 
     public void RunProgram(Dictionary<char, int> registers)
     {
@@ -383,11 +375,16 @@ internal class AssembunnyVm
 
     public IEnumerable<int> RunProgramWithOutput(Dictionary<char, int> registers)
     {
-        for (var pc = 0; pc < _instructions.Count(); pc++)
+        var regArray = new int[registers.Count];
+        for (int i = 0; i < registers.Count; i++)
+            regArray[i] = registers[(char)('a' + i)];
+
+        var progLen = _instructions.Count();
+        for (var pc = 0; pc < progLen; pc++)
         {
             var curr = _instructions[pc];
 
-            var result = curr.Execute(registers, pc, _instructions);
+            var result = curr.Execute(regArray, pc, _instructions);
             if (result != null)
             {
                 var val = result.Value;
@@ -405,5 +402,7 @@ internal class AssembunnyVm
                 }
             }
         }
+        for (int i = 0; i < registers.Count; i++)
+            registers[(char)('a' + i)] = regArray[i];
     }
 }
