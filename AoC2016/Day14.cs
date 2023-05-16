@@ -5,7 +5,7 @@ namespace AoC2016;
 
 public class Day14 : DayBase, IDay
 {
-    // TODO this is very slow for Part 2. MD5 is part of it for sure. Profiling should
+    // TODO this is slow for Part 2. MD5 is part of it for sure. Profiling should
     // be used to check for parts to optimize.
     // The code can be cleaned between Part 1 and 2 with a refactor. That logic is
     // largely shared.
@@ -77,8 +77,8 @@ public class Day14 : DayBase, IDay
             var rawBytes = md5.ComputeHash(Encoding.ASCII.GetBytes($"{_prefix}{curr}"));
             for (var i = 0; i < 2016; i++)
             {
-                var inner = BitConverter.ToString(rawBytes).Replace("-", "").ToLower();
-                rawBytes = md5.ComputeHash(Encoding.ASCII.GetBytes(inner));
+                var tempHash = ToLowerCaseHexArray(rawBytes);
+                rawBytes = md5.ComputeHash(tempHash);
             }
 
             var hash = BitConverter.ToString(rawBytes).Replace("-", "");
@@ -114,6 +114,19 @@ public class Day14 : DayBase, IDay
 
     private static List<(char c, int index)> RemoveTripleByChar(char c, List<(char c, int index)> triples)
         => triples.Where(t => t.c != c).ToList();
+
+    private static byte[] ToLowerCaseHexArray(byte[] rawBytes)
+    {
+        var result = new byte[rawBytes.Length * 2];
+        for (var x = 0; x < rawBytes.Length; x++)
+        {
+            var high = rawBytes[x] / 16;
+            var low = rawBytes[x] % 16;
+            result[x * 2] = high > 9 ? (byte)(high + 87) : (byte)(high + 48);
+            result[x * 2 + 1] = low > 9 ? (byte)(low + 87) : (byte)(low + 48);
+        }
+        return result;
+    }
 
     private static HashSet<char> ContainedQuints(string hash)
     {
