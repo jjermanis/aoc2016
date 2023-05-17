@@ -2,8 +2,10 @@
 
 public class Day11 : DayBase, IDay
 {
-    // TODO this is slow (over 2 minutes). Look to optimize.
-    // A more simple structure would make this quicker. Heuristics for search might be there.
+    // TODO this is slowish (over 50 seconds). Look to optimize.
+    // A more simple structure would make this quicker. 
+    // TODO maybe priority queue, ordered by move number and quality score?
+    // TODO indicates that time is spent in ValidMoves()
     // TODO refactor after optimization attempts
 
     private enum Kind
@@ -24,8 +26,7 @@ public class Day11 : DayBase, IDay
         public override string ToString()
         {
             return $"{Element.ToLower()} {Kind.ToString().ToLower()}";
-        }
-        
+        }       
     }
 
     private readonly IList<IList<Item>> _startLayout;
@@ -85,12 +86,18 @@ public class Day11 : DayBase, IDay
     private int Solve(IList<IList<Item>> startFloors, int targetCount)
     {
         var visited = new HashSet<long>();
+        var bestScore = 0;
 
         var options = new Queue<(int Floor, IList<IList<Item>> Floors, int MoveCount)>();
         options.Enqueue((0, startFloors, 0));
         while (options.Count > 0)
         {
             var (floorNum, floors, moveCount) = options.Dequeue();
+            var qs = QualityScore(floors);
+            if (qs + 7 < bestScore)
+                continue;
+            bestScore = Math.Max(qs, bestScore);
+
             moveCount++;
             foreach (var newMove in ValidMoves(floorNum, floors))
             {
@@ -100,7 +107,13 @@ public class Day11 : DayBase, IDay
                 var id = IdScore(currFloor, currFloors);
                 if (visited.Contains(id))
                     continue;
+
                 visited.Add(id);
+
+                var score = QualityScore(currFloors);
+                if (score + 7 < bestScore)
+                    continue;
+                bestScore = Math.Max(score, bestScore);
 
                 if (currFloors[3].Count == targetCount)
                     return moveCount;
@@ -108,6 +121,14 @@ public class Day11 : DayBase, IDay
             }
         }
         throw new Exception("No solution found");
+    }
+
+    private int QualityScore(IList<IList<Item>> floors)
+    {
+        var result = 0;
+        for (int i = 1; i < 4; i++)
+            result += floors[i].Count * (i + 1);
+        return result;
     }
 
     private IEnumerable<(int, IList<IList<Item>>)> ValidMoves(int floorNum, IList<IList<Item>> floors)
