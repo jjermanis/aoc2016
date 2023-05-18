@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace AoC2016;
+﻿namespace AoC2016;
 
 public class Day04 : DayBase, IDay
 {

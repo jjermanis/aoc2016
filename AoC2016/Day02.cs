@@ -4,6 +4,11 @@ public class Day02 : DayBase, IDay
 {
     private readonly IEnumerable<string> _lines;
 
+    // Note: SQUARE shape is this. No array needed - this is easy to calculate:
+    // 123
+    // 456
+    // 789
+
     private readonly List<String> DIAMOND = new List<String>()
     {
         "..1..",
@@ -29,33 +34,15 @@ public class Day02 : DayBase, IDay
     public int SquareCode()
     {
         var result = 0;
-        var x = 1;
-        var y = 1;
+        var (x, y) = (1, 1);
         foreach (var line in _lines)
         {
             foreach (var c in line)
             {
-                switch (c)
-                {
-                    case 'U':
-                        if (y > 0)
-                            y--;
-                        break;
-                    case 'D':
-                        if (y < 2)
-                            y++;
-                        break;
-                    case 'L':
-                        if (x > 0)
-                            x--;
-                        break;
-                    case 'R':
-                        if (x < 2)
-                            x++;
-                        break;
-                    default:
-                        throw new Exception($"Unknow direction: {c}");
-                }
+                // Try each move in the line. Only do it if it stays inbounds
+                (var nextX, var nextY) = AttemptMove(x, y, c);
+                if (nextX >= 0 && nextX <= 2 && nextY >= 0 && nextY <= 2)
+                    (x, y) = (nextX, nextY);
             }
             var curr = y * 3 + x + 1;
             result = result * 10 + curr;
@@ -66,20 +53,14 @@ public class Day02 : DayBase, IDay
     public string DiamondCode()
     {
         var result = "";
-        var x = -2;
-        var y = 0;
+        var (x, y) = (-2, 0);
+
         foreach (var line in _lines)
         {
             foreach (var c in line)
             {
-                (int nextX, int nextY) = c switch
-                {
-                    'U' => (x, y-1),
-                    'D' => (x, y+1),
-                    'L' => (x-1, y),
-                    'R' => (x+1, y),
-                    _ => throw new Exception($"Unknow direction: {c}")
-                };
+                // Try each move in the line. Only do it if it stays inbounds
+                (var nextX, var nextY) = AttemptMove(x, y, c);
                 if (Math.Abs(nextX) + Math.Abs(nextY) <= 2)
                     (x, y) = (nextX, nextY);
             }
@@ -87,4 +68,14 @@ public class Day02 : DayBase, IDay
         }
         return result;
     }
+
+    private (int x, int y) AttemptMove(int x, int y, char dir)
+        => dir switch
+        {
+            'U' => (x, y - 1),
+            'D' => (x, y + 1),
+            'L' => (x - 1, y),
+            'R' => (x + 1, y),
+            _ => throw new Exception($"Unknow direction: {dir}")
+        };
 }

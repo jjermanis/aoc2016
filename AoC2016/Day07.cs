@@ -2,8 +2,6 @@
 
 public class Day07 : DayBase, IDay
 {
-    // TODO refactor TlsCount and SslCount to use the same iterating method
-
     private readonly char[] BRACKETS = new char[] { '[', ']' };
 
     private readonly IEnumerable<string> _lines;
@@ -22,24 +20,18 @@ public class Day07 : DayBase, IDay
     }
 
     public int TlsCount()
-    {
-        var result = 0;
-        foreach (var line in _lines)
-        {
-            var sequences = line.Split(BRACKETS);
-            if (SupportsTls(sequences))
-                result++;
-        }
-        return result;
-    }
+        => MatchingCount(SupportsTls);
 
     public int SslCount()
+        => MatchingCount(SupportsSsl);
+
+    private int MatchingCount(Func<string[], bool> ConfirmSupportFunc)
     {
         var result = 0;
         foreach (var line in _lines)
         {
             var sequences = line.Split(BRACKETS);
-            if (SupportsSsl(sequences))
+            if (ConfirmSupportFunc(sequences))
                 result++;
         }
         return result;

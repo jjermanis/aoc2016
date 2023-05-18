@@ -2,6 +2,14 @@
 
 public class Day01 : DayBase, IDay
 {
+    internal enum Direction
+    {
+        North = 0,
+        East = 1,
+        South = 2,
+        West = 3
+    };
+
     private readonly IEnumerable<string> _steps;
 
     public Day01(string filename)
@@ -24,7 +32,7 @@ public class Day01 : DayBase, IDay
     {
         var x = 0;
         var y = 0;
-        var dir = 0;
+        var dir = Direction.North;
         foreach (var step in _steps)
         {
             dir = Rotate(dir, step[0]);
@@ -38,8 +46,8 @@ public class Day01 : DayBase, IDay
     {
         var x = 0;
         var y = 0;
-        var dir = 0;
-        var history = new HashSet<int>();
+        var dir = Direction.North;
+        var history = new HashSet<(int, int)>();
 
         foreach (var step in _steps)
         {
@@ -47,39 +55,33 @@ public class Day01 : DayBase, IDay
             var dist = int.Parse(step[1..]);
             for (var i = 0; i < dist; i++)
             {
+                // Go step-by-step, checking if this specifc spot has been visited
                 (x, y) = Move(x, y, dir, 1);
-                var code = x * 1024 + y;
-                if (history.Contains(code))
+                if (history.Contains((x, y)))
                     return Distance(x, y);
-                history.Add(code);
+                history.Add((x, y));
             }
         }
         throw new Exception("No repeat found");
     }
 
-    private static int Rotate(int currDir, char turn)
+    private static Direction Rotate(Direction currDir, char turn)
         => turn switch
         {
-            'L' => (currDir + 3) % 4,
-            'R' => (currDir + 1) % 4,
-            _ => throw new Exception($"Unexpected direction {turn}")
+            'L' => (Direction)(((int)currDir + 3) % 4),
+            'R' => (Direction)(((int)currDir + 1) % 4),
+            _ => throw new Exception($"Unexpected turn: {turn}")
         };
 
-    private static (int x, int y) Move(int x, int y, int dir, int dist)
-    {
-        switch (dir)
+    private static (int x, int y) Move(int x, int y, Direction dir, int dist)
+        => dir switch
         {
-            case 0:
-                y += dist; break;
-            case 1:
-                x += dist; break;
-            case 2:
-                y -= dist; break;
-            case 3:
-                x -= dist; break;
-        }
-        return (x, y);
-    }
+            Direction.North => (x, y + dist),
+            Direction.East => (x + dist, y),
+            Direction.South => (x, y - dist),
+            Direction.West => (x - dist, y),
+            _ => throw new Exception($"Unexpected direction: {dir}")
+        };
 
     private static int Distance(int x, int y)
         => Math.Abs(x) + Math.Abs(y);
