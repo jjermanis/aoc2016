@@ -4,7 +4,7 @@ public class Day02 : DayBase, IDay
 {
     private readonly IEnumerable<string> _lines;
 
-    // Note: SQUARE shape is this. No array needed - this is easy to calculate:
+    // Note: the SQUARE shape is this. No array needed - this is easy to calculate:
     // 123
     // 456
     // 789

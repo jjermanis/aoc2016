@@ -45,7 +45,7 @@ public class Day19 : DayBase, IDay
         for (var x = 1; x <= _elfCount; x++)
             remaining.AddLast(x);
         var currNode = remaining.Find((remaining.Count / 2) + 1);
-        bool extraStep = false;
+        bool extraStep = remaining.Count % 2 == 1;
         while (remaining.Count > 1)
         {
             var next = GetNext(currNode, remaining.First);

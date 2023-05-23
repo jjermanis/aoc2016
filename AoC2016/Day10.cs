@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace AoC2016;
+﻿namespace AoC2016;
 
 public class Day10 : DayBase, IDay
 {
