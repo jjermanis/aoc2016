@@ -48,6 +48,9 @@ public class Day19 : DayBase, IDay
         bool extraStep = remaining.Count % 2 == 1;
         while (remaining.Count > 1)
         {
+            if (currNode == null || remaining.First == null)
+                throw new Exception("Logical error - null nodes not expected");
+
             var next = GetNext(currNode, remaining.First);
             remaining.Remove(currNode);
             if (extraStep)
@@ -60,7 +63,7 @@ public class Day19 : DayBase, IDay
         return remaining.First.Value;
     }
 
-    private LinkedListNode<int> GetNext(LinkedListNode<int> curr, LinkedListNode<int> head)
-        => curr.Next != null ? curr.Next : head;
+    private static LinkedListNode<int> GetNext(LinkedListNode<int> curr, LinkedListNode<int> head)
+        => curr.Next ?? head;
 
 }

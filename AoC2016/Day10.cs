@@ -3,6 +3,7 @@
 public class Day10 : DayBase, IDay
 {
     // TODO refactoring would help here, for readibility
+    // TODO refactor the very similar Part 1 and 2... maybe exec in ctor?
 
     private struct Destination
     {
@@ -16,8 +17,8 @@ public class Day10 : DayBase, IDay
         }
     }
     private readonly Dictionary<int, (Destination low, Destination hi)> _rules;
-    private Dictionary<int, (int? a, int? b)> _bots;
-    private Dictionary<int, int> _output;
+    private readonly Dictionary<int, (int? a, int? b)> _bots;
+    private readonly Dictionary<int, int> _output;
 
     public Day10(string filename)
     {
@@ -47,8 +48,8 @@ public class Day10 : DayBase, IDay
                     _bots[id] = (value, null);
                 else
                 {
-                    var curr = _bots[id];
-                    _bots[id] = (curr.a, value);
+                    var (currA, _) = _bots[id];
+                    _bots[id] = (currA, value);
                 }
             }
         }
@@ -73,10 +74,14 @@ public class Day10 : DayBase, IDay
         while (fullBots.Count > 0)
         {
             var currId = fullBots.Dequeue();
-            var currBot = _bots[currId];
+            var (currBotA, currBotB) = _bots[currId];
             var currRules = _rules[currId];
-            var low = Math.Min(currBot.a.Value, currBot.b.Value);
-            var high = Math.Max(currBot.a.Value, currBot.b.Value);
+
+            if (currBotA == null || currBotB == null)
+                throw new Exception("Logical error: bots with an empty dest should not be in the queue");
+
+            var low = Math.Min(currBotA.Value, currBotB.Value);
+            var high = Math.Max(currBotA.Value, currBotB.Value);
 
             if (low == 17 && high == 61)
                 return currId;
@@ -103,10 +108,14 @@ public class Day10 : DayBase, IDay
         while (fullBots.Count > 0)
         {
             var currId = fullBots.Dequeue();
-            var currBot = _bots[currId];
+            var (currBotA, currBotB) = _bots[currId];
             var currRules = _rules[currId];
-            var low = Math.Min(currBot.a.Value, currBot.b.Value);
-            var high = Math.Max(currBot.a.Value, currBot.b.Value);
+
+            if (currBotA == null || currBotB == null)
+                throw new Exception("Logical error: bots with an empty dest should not be in the queue");
+
+            var low = Math.Min(currBotA.Value, currBotB.Value);
+            var high = Math.Max(currBotA.Value, currBotB.Value);
 
             var x = UpdateDestination(currRules.low, low);
             if (x != null)
@@ -132,8 +141,8 @@ public class Day10 : DayBase, IDay
         {
             if (_bots.ContainsKey(rule.Value))
             {
-                var curr = _bots[rule.Value];
-                _bots[rule.Value] = (curr.a, value);
+                var (currA, _) = _bots[rule.Value];
+                _bots[rule.Value] = (currA, value);
                 return rule.Value;
             }
             else

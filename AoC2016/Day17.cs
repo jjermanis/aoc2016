@@ -50,7 +50,8 @@ public class Day17 : DayBase, IDay
                     Directions.Up => (x, y - 1, 'U'),
                     Directions.Down => (x, y + 1, 'D'),
                     Directions.Left => (x - 1, y, 'L'),
-                    Directions.Right => (x + 1, y, 'R')
+                    Directions.Right => (x + 1, y, 'R'),
+                    _ => throw new Exception($"Unexpected direction: {direction}")
                 };
                 var newHash = hash + hashAdd;
                 if (currX == 3 && currY == 3)
@@ -86,7 +87,8 @@ public class Day17 : DayBase, IDay
                     Directions.Up => (x, y - 1, 'U'),
                     Directions.Down => (x, y + 1, 'D'),
                     Directions.Left => (x - 1, y, 'L'),
-                    Directions.Right => (x + 1, y, 'R')
+                    Directions.Right => (x + 1, y, 'R'),
+                    _ => throw new Exception($"Unexpected direction: {direction}")
                 };
                 var newHash = hash + hashAdd;
                 if (currX == 3 && currY == 3)
@@ -99,7 +101,7 @@ public class Day17 : DayBase, IDay
         return result - _basePasscode.Length;
     }
 
-    private List<Directions> FindDirections(string hash)
+    private static List<Directions> FindDirections(string hash)
     {
         var result = new List<Directions>();
 

@@ -89,8 +89,11 @@ public class SampleTestCases
         Assert.That(t2.DecompressedLength(), Is.EqualTo(7));
 
         var t3 = new Day09("Day09Test03.txt");
-        Assert.That(t3.DecompressedLength(), Is.EqualTo(9));
-        Assert.That(t3.ImprovedDecompressedLength(), Is.EqualTo(9));
+        Assert.Multiple(() =>
+        {
+            Assert.That(t3.DecompressedLength(), Is.EqualTo(9));
+            Assert.That(t3.ImprovedDecompressedLength(), Is.EqualTo(9));
+        });
 
         var t4 = new Day09("Day09Test04.txt");
         Assert.That(t4.DecompressedLength(), Is.EqualTo(11));

@@ -8,9 +8,8 @@ public class Day24 : DayBase, IDay
 
     private readonly HashSet<(int X, int Y)> _path;
     private readonly Dictionary<int, (int X, int Y)> _targets;
-    private readonly (int X, int Y) _start;
 
-    private readonly List<(int dx, int dy)> _NEXT_DELTAS = new List<(int, int)>
+    private readonly List<(int dx, int dy)> _NEXT_DELTAS = new()
         { (-1, 0), (1, 0), (0, -1), (0, 1) };
 
     public Day24(string filename)
@@ -26,11 +25,7 @@ public class Day24 : DayBase, IDay
                 {
                     _path.Add((x, y));
                     if (curr != '.')
-                    {
-                        if (curr == '0')
-                            _start = (x, y);
                         _targets[curr - '0'] = (x, y);
-                    }
                 }
             }
     }
@@ -102,7 +97,7 @@ public class Day24 : DayBase, IDay
     private int TargetDistance(int source, int dest)
     {
         var startLoc = _targets[source];
-        var endLoc = _targets[dest];
+        var (endX, endY) = _targets[dest];
 
         var queue = new Queue<((int X, int Y), int Distance)>();
         var visited = new HashSet<(int x, int y)>() { startLoc };
@@ -118,7 +113,7 @@ public class Day24 : DayBase, IDay
                 if (_path.Contains(newCoord) && !visited.Contains(newCoord))
                 {
                     visited.Add(newCoord);
-                    if (newCoord.Item1 == endLoc.X && newCoord.Item2 == endLoc.Y)
+                    if (newCoord.Item1 == endX && newCoord.Item2 == endY)
                         return currMoves;
                     queue.Enqueue((newCoord, currMoves));
                 }
@@ -152,9 +147,7 @@ public class Day24 : DayBase, IDay
                         int i1, int i2)
     {
         var list = new List<char>(val);
-        char temp = list[i1];
-        list[i1] = list[i2];
-        list[i2] = temp;
+        (list[i1], list[i2]) = (list[i2], list[i1]);
         return new string(list.ToArray());
     }
 }
