@@ -2,176 +2,145 @@
 
 public class Day21 : DayBase, IDay
 {
-    // TODO compiler warnings are heavy
     // TODO clean up the permutations code
 
-    private enum OpType
+    internal interface IInstruction
     {
-        SwapPosition,
-        SwapLetter,
-        RotateLeft,
-        RotateRight,
-        RotateBased,
-        Reverse,
-        Move
+        string Execute(string input);
     }
 
-    private struct Instruction
+    internal class SwapPositionInstruction : IInstruction
     {
-        public readonly OpType Operation;
-        public readonly object? Operand1;
-        public readonly object? Operand2;
+        public readonly int Operand1;
+        public readonly int Operand2;
 
-        public Instruction(string text)
+        public SwapPositionInstruction(int op1, int op2)
         {
-            var tokens = text.Split(' ');
-            switch (tokens[0])
-            {
-                case "swap":
-                    if (tokens[1].Equals("position"))
-                    {
-                        Operation = OpType.SwapPosition;
-                        Operand1 = int.Parse(tokens[2]);
-                        Operand2 = int.Parse(tokens[5]);
-                    }
-                    else if (tokens[1] == "letter")
-                    {
-                        Operation = OpType.SwapLetter;
-                        Operand1 = tokens[2][0];
-                        Operand2 = tokens[5][0];
-                    }
-                    else 
-                        throw new ArgumentException($"Unrecognized swap type: {tokens[1]}");
-                    break;
-                case "rotate":
-                    if (tokens[1] == "left")
-                    {
-                        Operation = OpType.RotateLeft;
-                        Operand1 = int.Parse(tokens[2]);
-                        Operand2 = null;
-                    }
-                    else if (tokens[1] == "right")
-                    {
-                        Operation = OpType.RotateRight;
-                        Operand1 = int.Parse(tokens[2]);
-                        Operand2 = null;
-                    }
-                    else if (tokens[1] == "based")
-                    {
-                        Operation = OpType.RotateBased;
-                        Operand1 = tokens[6][0];
-                        Operand2 = null;
-                    }
-                    else
-                        throw new ArgumentException($"Unrecognized rotate type: {tokens[1]}");
-                    break;
-                case "reverse":
-                    Operation = OpType.Reverse;
-                    Operand1 = int.Parse(tokens[2]);
-                    Operand2 = int.Parse(tokens[4]);
-                    break;
-                case "move":
-                    Operation = OpType.Move;
-                    Operand1 = int.Parse(tokens[2]);
-                    Operand2 = int.Parse(tokens[5]);
-                    break;
-                default:
-                    throw new ArgumentException($"Unrecognized op: {tokens[0]}");
-            }
+            Operand1 = op1;
+            Operand2 = op2;
+        }
+
+        public string Execute(string input)
+            => Swap(input, Operand1, Operand2);
+    }
+
+    internal class SwapLetterInstruction : IInstruction
+    {
+        public readonly char Operand1;
+        public readonly char Operand2;
+
+        public SwapLetterInstruction(char op1, char op2)
+        {
+            Operand1 = op1;
+            Operand2 = op2;
         }
 
         public string Execute(string input)
         {
-            return Operation switch
-            {
-                OpType.SwapPosition => SwapPosition(input),
-                OpType.SwapLetter => SwapLetter(input),
-                OpType.RotateLeft => RotateLeft(input),
-                OpType.RotateRight => RotateRight(input),
-                OpType.RotateBased => RotateBased(input),
-                OpType.Reverse => Reverse(input),
-                OpType.Move => Move(input),
-                _ => throw new Exception($"No implementation for {Operation}")
-            };
-        }
-
-        string SwapPosition(string input)
-            => Swap(input, (int)Operand1, (int)Operand2);
-
-        string SwapLetter(string input)
-        {
-            int index1 = input.IndexOf((char)Operand1);
-            int index2 = input.IndexOf((char)Operand2);
+            int index1 = input.IndexOf(Operand1);
+            int index2 = input.IndexOf(Operand2);
             return Swap(input, index1, index2);
         }
+    }
 
-        string Swap(string input, int i1, int i2)
+    internal class RotateLeftInstruction : IInstruction
+    {
+        public readonly int Operand1;
+
+        public RotateLeftInstruction(int op1)
         {
-            var list = new List<char>(input);
-            char temp = list[i1];
-            list[i1] = list[i2];
-            list[i2] = temp;
-            return new string(list.ToArray());
+            Operand1 = op1;
         }
 
-        string RotateLeft(string input)
-            => Rotate(input, (int)Operand1);
+        public string Execute(string input)
+            => Rotate(input, Operand1);
+    }
 
+    internal class RotateRightInstruction : IInstruction
+    {
+        public readonly int Operand1;
 
-        string RotateRight(string input)
-            => Rotate(input, input.Length - (int)Operand1);
-
-        string RotateBased(string input)
+        public RotateRightInstruction(int op1)
         {
-            char match = (char)Operand1;
-            var val = input.IndexOf(match) + 1;
+            Operand1 = op1;
+        }
+
+        public string Execute(string input)
+            => Rotate(input, input.Length - Operand1);
+    }
+
+    internal class RotateBasedInstruction : IInstruction
+    {
+        public readonly char Operand1;
+
+        public RotateBasedInstruction(char op1)
+        {
+            Operand1 = op1;
+        }
+
+        public string Execute(string input)
+        {
+            var val = input.IndexOf(Operand1) + 1;
             if (val > 4)
                 val = (val + 1) % input.Length;
             return Rotate(input, input.Length - val);
         }
+    }
 
-        string Rotate(string input, int posCount)
+    internal class ReverseInstruction : IInstruction
+    {
+        public readonly int Operand1;
+        public readonly int Operand2;
+
+        public ReverseInstruction(int op1, int op2)
         {
-            return input.Substring(posCount) + input.Substring(0, posCount);
+            Operand1 = op1;
+            Operand2 = op2;
         }
 
-        string Reverse(string input)
+        public string Execute(string input)
         {
-            int index1 = (int)Operand1;
-            int index2 = (int)Operand2;
-
-            var left = index1 > 0 ? input.Substring(0, index1) : "";
+            var left = Operand1 > 0 ? input[0..Operand1] : "";
 
             var middleList = new List<char>(
-                input.Substring(index1, index2-index1+1));
+                input.Substring(Operand1, Operand2 - Operand1 + 1));
             middleList.Reverse();
             var middle = new string(middleList.ToArray());
 
-            var right = index2 < input.Length ? input.Substring(index2 + 1) : "";
+            var right = Operand2 < input.Length ? input[(Operand2 + 1)..] : "";
 
             return left + middle + right;
         }
+    }
 
-        string Move(string input)
+    internal class MoveInstruction : IInstruction
+    {
+        public readonly int Operand1;
+        public readonly int Operand2;
+
+        public MoveInstruction(int op1, int op2)
+        {
+            Operand1 = op1;
+            Operand2 = op2;
+        }
+
+        public string Execute(string input)
         {
             var list = new List<char>(input);
-            var removeIndex = (int)Operand1;
-            var insertIndex = (int)Operand2;
-            //if (insertIndex > removeIndex)
-            //    insertIndex--;
-            var val = list[removeIndex];
-            list.RemoveAt(removeIndex);
-            list.Insert(insertIndex, val);
+            var val = list[Operand1];
+            list.RemoveAt(Operand1);
+            list.Insert(Operand2, val);
             return new string(list.ToArray());
         }
     }
-    private readonly List<Instruction> _instructions;
+
+    private readonly List<IInstruction> _operations;
 
     public Day21(string filename)
-    { 
-        _instructions = new List<Instruction>();
+    {
+        _operations = new List<IInstruction>();
         foreach (var line in TextFileLines(filename))
-            _instructions.Add(new Instruction(line));
+            _operations.Add(ParseOperation(line));
     }
 
     public Day21() : this("Day21.txt")
@@ -198,10 +167,40 @@ public class Day21 : DayBase, IDay
         throw new Exception("No result found");
     }
 
+    private static IInstruction ParseOperation(string text)
+    {
+        var tokens = text.Split(' ');
+        switch (tokens[0])
+        {
+            case "swap":
+                if (tokens[1].Equals("position"))
+                    return new SwapPositionInstruction(int.Parse(tokens[2]), int.Parse(tokens[5]));
+                else if (tokens[1] == "letter")
+                    return new SwapLetterInstruction(tokens[2][0], tokens[5][0]);
+                else
+                    throw new ArgumentException($"Unrecognized swap type: {tokens[1]}");
+            case "rotate":
+                if (tokens[1] == "left")
+                    return new RotateLeftInstruction(int.Parse(tokens[2]));
+                else if (tokens[1] == "right")
+                    return new RotateRightInstruction(int.Parse(tokens[2]));
+                else if (tokens[1] == "based")
+                    return new RotateBasedInstruction(tokens[6][0]);
+                else
+                    throw new ArgumentException($"Unrecognized rotate type: {tokens[1]}");
+            case "reverse":
+                return new ReverseInstruction(int.Parse(tokens[2]), int.Parse(tokens[4]));
+            case "move":
+                return new MoveInstruction(int.Parse(tokens[2]), int.Parse(tokens[5]));
+            default:
+                throw new ArgumentException($"Unrecognized op: {tokens[0]}");
+        }
+    }
+
     public string Evaluate(string input)
     {
         var curr = input;
-        foreach (var inst in _instructions)
+        foreach (var inst in _operations)
             curr = inst.Execute(curr);
         return curr;
     }
@@ -231,9 +230,12 @@ public class Day21 : DayBase, IDay
                         int i1, int i2)
     {
         var list = new List<char>(val);
-        char temp = list[i1];
-        list[i1] = list[i2];
-        list[i2] = temp;
+        (list[i1], list[i2]) = (list[i2], list[i1]);
         return new string(list.ToArray());
+    }
+
+    internal static string Rotate(string input, int posCount)
+    {
+        return input[posCount..] + input[0..posCount];
     }
 }
